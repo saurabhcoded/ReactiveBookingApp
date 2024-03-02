@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GmeetController;
 use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ZoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/* Manage Resources Crud */
+Route::group(['prefix' => 'services'], function () {
+    Route::get('/all', [ServiceController::class, 'getAllServices'])->name('allServices');
+    Route::get('/active', [ServiceController::class, 'getActiveServices'])->name('activeServices');
+    Route::get('/single/{serviceslug}', [ServiceController::class, 'getServiceBySlug'])->name('serviceBySlug');
+    Route::post('/create', [ServiceController::class, 'CreateService'])->name('createService');
+    Route::put('/update/{serviceID}', [ServiceController::class, 'UpdateService'])->name('updateService');
+    Route::patch('/activate/{serviceID}', [ServiceController::class, 'ActivateService'])->name('activateservice');
+    Route::delete('/delete/{serviceID}', [ServiceController::class, 'DeleteService'])->name('deleteservice');
 });
 
 /* Manage Resources Crud */
