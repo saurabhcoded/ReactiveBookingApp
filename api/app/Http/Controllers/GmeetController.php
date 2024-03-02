@@ -13,21 +13,34 @@ use Google\Service\Calendar\Event as GoogleCalendarEvent;
 
 class GmeetController extends Controller {
     /** @var GoogleClient */
-    public $googleClient;
+    public static $googleClient;
 
     /** @var GoogleCalendarService */
-    public $calendarService;
+    public static $calendarService;
+
+    /* Service Account Calendar ID */
+    public static $calendarId;
 
     public function __construct() {
-        $this->googleClient = new GoogleClient();
-        $this->googleClient->setAuthConfig(storage_path('app/google-calendar/service-account-credentials.json'));
-        $this->googleClient->setScopes([GoogleCalendarService::CALENDAR]);
-        $this->calendarService = new GoogleCalendarService($this->googleClient);
+        // Ensure static properties are initialized only once
+        if (!self::$googleClient) {
+            self::$googleClient = new GoogleClient();
+            self::$googleClient->setAuthConfig(storage_path('app/google-calendar/service-account-credentials.json'));
+            self::$googleClient->setScopes([GoogleCalendarService::CALENDAR]);
+        }
+        if (!self::$calendarId) {
+            self::$calendarId = env('GOOGLE_CALENDAR_ID');
+        }
+
+        if (!self::$calendarService) {
+            self::$calendarService = new GoogleCalendarService(self::$googleClient);
+        }
     }
 
     /* Function to Get all Calendars */
     public function getAllCalendars() {
         try {
+            new self();
             // Get list of calendars
             $calendars = $this->calendarService->calendarList->listCalendarList();
 
@@ -36,7 +49,7 @@ class GmeetController extends Controller {
             }
 
             // Return API response
-            return apiResponse("Calendars Fetched Successfully", 'success', 200, $calendars->getItems());
+            return apiResponse("Calendars Fetched Successfully", 'success', 200, );
         } catch (\Exception $e) {
             return apiResponse("Error: " . $e->getMessage(), 'error', 500);
         }
@@ -46,7 +59,6 @@ class GmeetController extends Controller {
     public function getAllBookings() {
         // Get list of calendars
         $calendars = $this->calendarService->calendarList->listCalendarList();
-
         // Fetch events from each calendar
         $allEvents = [];
         $calendarId = env('GOOGLE_CALENDAR_ID');
@@ -60,50 +72,44 @@ class GmeetController extends Controller {
     }
 
     /* Function to create a New Booking */
-    public function createNewBooking(Request $request) {
+    public static function createNewEvent($data) {
         try {
-            $body = $request->all();
-            $eventName = $body['meetTitle'];
-            $startTime = Carbon::parse($body['meetStart'])->format('Y-m-d\TH:i:sP');
-            $endTime = Carbon::parse($body['meetStart'])->addMinutes($body['meetDuration'])->format('Y-m-d\TH:i:sP');
-
+            new self();
             // Define event details
             $event = new GoogleCalendarEvent([
-                'summary' => $eventName,
-                'location' => 'Online Meeting',
-                'description' => $body['meetDesc'],
-                'start' => ['dateTime' => $startTime, 'timeZone' => 'UTC'],
-                'end' => ['dateTime' => $endTime, 'timeZone' => 'UTC'],
-                'conferenceData' => [
-                    'createRequest' => ['requestId' => 'random-unique-id'],
-                    'entryPoints' => [
-                        [
-                            'entryPointType' => 'video',
-                            'uri' => "https://zoom.us/j/93831668388?pwd=UHRqU0VwMjF3d1B0VXU5bFBRYWIxdz09",
-                        ]
-                    ]
-                ],
+                'summary' => $data->summary,
+                'location' => $data->location,
+                'description' => $data->description,
+                'start' => $data->start,
+                'end' => $data->end,
                 'reminders' => array(
                     'useDefault' => FALSE,
                     'overrides' => array(
-                        array('method' => 'email', 'minutes' => 10),
-                        array('method' => 'popup', 'minutes' => 10),
+                        array('method' => 'email', 'minutes' => $data->reminder),
+                        array('method' => 'popup', 'minutes' =>  $data->reminder),
                     ),
                 ),
             ]);
-
-            $calendarId = env('GOOGLE_CALENDAR_ID'); // Use 'primary' for the primary calendar
-
             // Insert event
-            $createdEvent = $this->calendarService->events->insert($calendarId, $event);
-            return apiResponse("New Booking Created Successfully", 'success', 200, $createdEvent);
+            $createdEvent = self::$calendarService->events->insert(self::$calendarId, $event);
+            return $createdEvent;
         } catch (\Throwable $th) {
             //throw $th;
-            dd($th);
-            return apiResponse("Error in api",  'success', 500, $th->name);
+            return $th->getLine() . $th->getMessage();
         }
     }
 
+    /* Function to create a New Booking */
+    public static function getGEventByID(Request $request, $eventID) {
+        try {
+            $eventCalendar = env('GOOGLE_CALENDAR_ID');
+            $googleEvent = self::$calendarService->events->get($eventCalendar, $eventID);
+            return apiResponse("Booking fetched Successfully",  'success', 200, $googleEvent);
+        } catch (\Throwable $th) {
+            dd($th);
+            return apiResponse("Error in api",  'success', 500);
+        }
+    }
     /* Function to create a New Booking */
     public function updateBooking(Request $request) {
         $body = $request->all();

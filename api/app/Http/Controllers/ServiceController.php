@@ -55,7 +55,11 @@ class ServiceController extends Controller {
             if (isset($Service['thumbnail_url'])) {
                 $Service['thumbnail_url'] = ResourcesController::getResourcePublicUrl($Service->thumbnail_url);
             }
-            return apiResponse("Fetched Service By Slug", 'success', 200,  $Service);
+            if ($Service) {
+                return apiResponse("Fetched Service By Slug", 'success', 200,  $Service);
+            } else {
+                return apiResponse("Service Not Found", 'error', 404);
+            }
         } catch (\Exception $e) {
             return apiResponse($e->getMessage(), "error", 500);
         }

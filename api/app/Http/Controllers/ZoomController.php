@@ -6,7 +6,8 @@ use DateTime;
 use Illuminate\Http\Request;
 
 class ZoomController extends Controller {
-    function getZoomToken() {
+
+    public static function getZoomToken() {
         $accountID = env("ZOOM_ACCOUNT_ID");
         $clientID = env("ZOOM_CLIENT_ID");
         $clientSecret = env("ZOOM_CLIENT_SECRET");
@@ -98,15 +99,12 @@ class ZoomController extends Controller {
     }
 
     /* Function to create a Zoom Meeting */
-    public function createZoomMeeting(Request $request) {
-        $accessToken = $this->getZoomToken();
+    public static function createZoomMeeting($data) {
+        $accessToken = self::getZoomToken();
         if (empty($accessToken)) {
             return apiResponse('Invalid Access Token', 'error', 400);
         }
         $base_url = 'https://api.zoom.us/v2';
-
-        $data = $request->all();
-
         $headers = array(
             "Content-Type: application/json",
             "Authorization: Bearer " . $accessToken, // Get your access token by following the OAuth 2.0 flow
@@ -117,16 +115,16 @@ class ZoomController extends Controller {
         $result = json_decode($response, true);
 
         if ($result && isset($result['id'])) {
-            return apiResponse('Meeting Created Successfully', 'success', 200, $result);
+            return $result;
         } else {
-            return apiResponse('Error in Creating Meeting', 'error', 400);
+            return null;
         }
     }
 
     /* Function to Delete a Zoom Meeting */
-    public function deleteZoomMeeting(Request $request) {
+    public static function deleteZoomMeeting(Request $request) {
         $meetingId = $request->meetingId;
-        $accessToken = $this->getZoomToken();
+        $accessToken = self::getZoomToken();
         $baseUrl = 'https://api.zoom.us/v2';
         $endpoint = '/meetings/' . $meetingId;
 

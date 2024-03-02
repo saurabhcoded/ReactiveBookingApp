@@ -4,3 +4,4 @@ export * from "./ServiceReviews";
 export * from "./ServiceDescription";
 export * from "./ContactCard";
 export * from "./BookingDialog";
+export * from "./ServiceCard";

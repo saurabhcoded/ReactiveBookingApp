@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GmeetController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\ServiceController;
@@ -44,8 +45,7 @@ Route::group(['prefix' => 'resources'], function () {
 /* Manage Course Booking */
 Route::group(['prefix' => 'gmeet'], function () {
     Route::get('/all', [GmeetController::class, 'getAllBookings'])->name('getbookings');
-    Route::get('/single/{gmeetID}', [GmeetController::class, 'getAllBookings'])->name('getbookings');
-    Route::post('/create', [GmeetController::class, 'createNewBooking'])->name('createbooking');
+    Route::get('/single/{eventID}', [GmeetController::class, 'getGEventByID'])->name('getbookings');
     Route::put('/update', [GmeetController::class, 'updateBooking'])->name('updatebooking');
     Route::delete('/delete', [GmeetController::class, 'deleteBooking'])->name('deletebooking');
 });
@@ -56,6 +56,13 @@ Route::group(['prefix' => 'zoom'], function () {
     Route::put('/update/{meetingId}', [ZoomController::class, 'updateZoomMeeting']);
     Route::post('/create', [ZoomController::class, 'createZoomMeeting']);
     Route::delete('/delete', [ZoomController::class, 'deleteZoomMeeting']);
+});
+
+/* Create Bookings */
+Route::group(['prefix' => 'booking'], function () {
+    Route::post('/create', [BookingController::class, 'createBooking']);
+    Route::get('/all', [BookingController::class, 'getAllBookings']);
+    Route::get('/mybooking/{bookEmail}', [BookingController::class, 'getPersonalBookings']);
 });
 
 Route::any('{any}', function () {

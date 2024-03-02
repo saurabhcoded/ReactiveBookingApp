@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Button, Card, CardContent, List, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, List, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 import { BookingDialog } from ".";
 import { Language, LockClock, VideoCall } from "@mui/icons-material";
 
-export const BookingCard = () => {
+export const BookingCard = ({ service }) => {
   const [bookNow, setBookNow] = React.useState(false);
   const openBookNow = () => setBookNow(true);
   return (
@@ -11,20 +11,20 @@ export const BookingCard = () => {
       <Card variant="outlined" className="booking-card" sx={{ padding: 2 }}>
         <Stack gap={1}>
           <Typography variant="h5" className="heading">
-            Web Development Course
+            {service?.name}
           </Typography>
           <List dense={true} className="info-list">
             <ListItem>
               <ListItemIcon>
                 <LockClock color="primary" />
               </ListItemIcon>
-              <ListItemText primary="45 Min" />
+              <ListItemText primary={`${service?.duration} Min`} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
                 <Language color="primary" />
               </ListItemIcon>
-              <ListItemText primary="English" />
+              <ListItemText primary={service?.language} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
@@ -37,7 +37,12 @@ export const BookingCard = () => {
             <img src="https://cdn-icons-png.flaticon.com/512/5435/5435707.png" alt="service" height={60} />
             <Box>
               <Typography className="heading">One Time</Typography>
-              <Typography className="amount">Rs. 500</Typography>
+              <Typography className="amount">
+                Rs. {service?.discountedprice}&nbsp;
+                <Typography fontWeight={500} display={"inline"} fontSize={16} color={"error"}>
+                  <del>{service?.mainprice}</del>
+                </Typography>
+              </Typography>
             </Box>
           </Stack>
           <Button size="large" variant="contained" fullWidth onClick={openBookNow}>
@@ -45,7 +50,7 @@ export const BookingCard = () => {
           </Button>
         </Stack>
       </Card>
-      <BookingDialog open={bookNow} setOpen={setBookNow} />
+      <BookingDialog open={bookNow} setOpen={setBookNow} service={service} />
     </>
   );
 };

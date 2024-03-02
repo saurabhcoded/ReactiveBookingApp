@@ -7,13 +7,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-export const ServiceSlides = () => {
+export const ServiceSlides = ({ service }) => {
   return (
     <Card variant="outlined" className="service-card">
       <Swiper className="service-slides" modules={[Pagination, Navigation]} spaceBetween={30} pagination={{ clickable: true }} navigation={true}>
         {SlidesJson.map((slide) => (
           <SwiperSlide key={slide.slideID} className="service-slide">
-            <ServiceSlide slide={slide} />
+            <ServiceSlide slide={slide} slideImage={service?.thumbnail_url} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -21,8 +21,8 @@ export const ServiceSlides = () => {
   );
 };
 
-const ServiceSlide = ({ slide }) => {
-  return <img src={slide.slideImage} alt={slide.slideTitle} className="service-slide-img" />;
+const ServiceSlide = ({ slide, slideImage }) => {
+  return <img src={slideImage} alt={slide.slideTitle} className="service-slide-img" />;
 };
 
 const SlidesJson = [
