@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ServicePage } from "@/pages";
+import { ManageServices, ServicePage } from "@/pages";
 import { createTheme } from "./theme";
-import {ThemeProvider} from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 
 function App() {
   const theme = createTheme();
@@ -10,6 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ServicePage />} />
+          <Route path="/manage" element={<ManageServices />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

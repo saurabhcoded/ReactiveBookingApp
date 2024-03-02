@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent } from "@mui/material";
+import { Card } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 
@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 export const ServiceSlides = () => {
   return (
     <Card variant="outlined" className="service-card">
-      <Swiper className="service-slides" modules={[Pagination, Navigation]} spaceBetween={30} pagination={{ clickable: true }}>
+      <Swiper className="service-slides" modules={[Pagination, Navigation]} spaceBetween={30} pagination={{ clickable: true }} navigation={true}>
         {SlidesJson.map((slide) => (
           <SwiperSlide key={slide.slideID} className="service-slide">
             <ServiceSlide slide={slide} />
