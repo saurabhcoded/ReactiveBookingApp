@@ -1,5 +1,6 @@
 import { getActiveServices } from "@/_services/servicesService";
 import { ServiceCard } from "@/components/service";
+import { ServiceCardSkeleton } from "@/components/service/ServiceCardSkeleton";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 
@@ -28,11 +29,19 @@ export const AllServices = () => {
             All Services
           </Typography>
           <Grid container spacing={3} className="grid-wrapper">
-            {services.data.map((service) => (
-              <Grid item xs={4}>
-                <ServiceCard key={service.id} service={service} />
-              </Grid>
-            ))}
+            {services.loading
+              ? [1, 2, 3].map((skeleton) => {
+                  return (
+                    <Grid item xs={4}>
+                      <ServiceCardSkeleton key={skeleton} />
+                    </Grid>
+                  );
+                })
+              : services.data.map((service) => (
+                  <Grid item xs={4}>
+                    <ServiceCard key={service.id} service={service} />
+                  </Grid>
+                ))}
           </Grid>
         </Box>
       </Container>

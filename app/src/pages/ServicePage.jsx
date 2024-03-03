@@ -1,4 +1,5 @@
 import { getServiceBySlug } from "@/_services/servicesService";
+import { LoadingComponent } from "@/components/common/LoadingComponent";
 import { BookingCard, ServiceReviews, ServiceSlides, ServiceDescription, ContactCard } from "@/components/service";
 import { Box, Container, Grid, Stack } from "@mui/material";
 import React from "react";
@@ -30,7 +31,7 @@ export const ServicePage = () => {
     <Box className="service">
       <Container>
         {service.loading ? (
-          <div>Loading...</div>
+          <LoadingComponent />
         ) : (
           <Grid container spacing={3} className="grid-wrapper">
             <Grid item xs={8}>

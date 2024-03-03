@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BellIcon from "@heroicons/react/24/solid/BellIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon";
-import { Avatar, Badge, Box, Button, IconButton, Menu, MenuItem, Stack, SvgIcon, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Badge, Box, Button, Container, IconButton, Menu, MenuItem, Stack, SvgIcon, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { NavLink, useNavigate } from "react-router-dom";
 import { KeyboardArrowDown } from "@mui/icons-material";
@@ -53,52 +53,56 @@ export const Header = () => {
         },
         zIndex: (theme) => theme.zIndex.appBar,
       }}>
-      <Stack
-        alignItems="center"
-        direction="row"
-        justifyContent="space-between"
-        spacing={2}
-        sx={{
-          minHeight: TOP_NAV_HEIGHT,
-          px: 2,
-        }}>
-        <Stack alignItems="center" direction="row" spacing={2}>
-          {!lgUp && (
-            <IconButton onClick={onNavOpen}>
-              <SvgIcon fontSize="small">
-                <Bars3Icon />
-              </SvgIcon>
-            </IconButton>
-          )}
-          <Typography variant="h6">Reactive Booking</Typography>
-        </Stack>
-        <Stack alignItems="center" direction="row" spacing={2}>
-          {/* Admin Menu */}
-          <Button id="admin-button" onClick={manageMenu("admin")}>
-            Admin <KeyboardArrowDown />
-          </Button>
-          <Menu id="admin-menu" anchorEl={anchorEl} open={openMenuID === "admin"} onClose={manageMenu(null)}>
-            <MenuItem onClick={handleNavigate("/admin/bookings")}>Manage Bookings</MenuItem>
-            <MenuItem onClick={handleNavigate("/admin/services")}>Manage Services</MenuItem>
-          </Menu>
-          <NavLink to="/">All Services</NavLink>
-          <Tooltip title="Contacts">
-            <IconButton>
-              <SvgIcon fontSize="small">
-                <UsersIcon />
-              </SvgIcon>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Notifications">
-            <IconButton>
-              <Badge badgeContent={4} color="success" variant="dot">
+      <Container>
+        <Stack
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
+          spacing={2}
+          sx={{
+            minHeight: TOP_NAV_HEIGHT,
+          }}>
+          <Stack alignItems="center" direction="row" spacing={2}>
+            {!lgUp && (
+              <IconButton onClick={onNavOpen}>
                 <SvgIcon fontSize="small">
-                  <BellIcon />
+                  <Bars3Icon />
                 </SvgIcon>
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          {/* <Avatar
+              </IconButton>
+            )}
+            <NavLink to={"/"}>
+              <img src="/logo.svg" alt="reactive" height={30} />
+            </NavLink>
+          </Stack>
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <NavLink to="/" component="h5">
+              All Services
+            </NavLink>
+            {/* Admin Menu */}
+            <Button id="admin-button" onClick={manageMenu("admin")}>
+              Admin <KeyboardArrowDown />
+            </Button>
+            <Menu id="admin-menu" anchorEl={anchorEl} open={openMenuID === "admin"} onClose={manageMenu(null)}>
+              <MenuItem onClick={handleNavigate("/admin/bookings")}>Manage Bookings</MenuItem>
+              <MenuItem onClick={handleNavigate("/admin/services")}>Manage Services</MenuItem>
+            </Menu>
+            {/* <Tooltip title="Contacts">
+              <IconButton>
+                <SvgIcon fontSize="small">
+                  <UsersIcon />
+                </SvgIcon>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Notifications">
+              <IconButton>
+                <Badge badgeContent={4} color="success" variant="dot">
+                  <SvgIcon fontSize="small">
+                    <BellIcon />
+                  </SvgIcon>
+                </Badge>
+              </IconButton>
+            </Tooltip> */}
+            {/* <Avatar
             onClick={accountPopover.handleOpen}
             ref={accountPopover.anchorRef}
             sx={{
@@ -108,8 +112,9 @@ export const Header = () => {
             }}
             src={userData?.profile?.url || urlConstants.defaultAvatar}
           /> */}
+          </Stack>
         </Stack>
-      </Stack>
+      </Container>
     </Box>
   );
 };

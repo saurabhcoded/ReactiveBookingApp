@@ -1,11 +1,13 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
 export const ServiceCard = ({ service }) => {
   return (
-    <Card variant="outlined">
-      <CardMedia sx={{ height: 240 }} image={service?.thumbnail_url} title={service?.name} />
+    <Card variant="outlined" sx={{ height: "100%" }}>
+      <CardActionArea LinkComponent={Link} to={`/service/${service?.slug}`}>
+        <CardMedia sx={{ height: 240 }} image={service?.thumbnail_url} title={service?.name} />
+      </CardActionArea>
       <CardContent sx={{ padding: 2 }}>
         <Typography gutterBottom variant="h5" component="div">
           {service?.name}
