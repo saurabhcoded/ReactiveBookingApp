@@ -22,9 +22,9 @@ const Accordion = styled((props) => <MuiAccordion disableGutters elevation={0} s
 
 const AccordionSummary = styled((props) => <MuiAccordionSummary expandIcon={<ArrowForwardIosSharp sx={{ fontSize: "0.9rem" }} />} {...props} />)(({ theme }) => ({
   backgroundColor: theme.palette.primary.lightest,
-  color: theme.palette.primary.dark,
+  color: theme.palette.primary.main,
   "& .MuiSvgIcon-root": {
-    color: theme.palette.primary.dark,
+    color: theme.palette.primary.main,
   },
   flexDirection: "row-reverse",
   "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
@@ -89,7 +89,8 @@ export const BookingDialog = ({ open = false, setOpen, service }) => {
   );
 };
 
-const createTimeArray = (start, end, gap) => {
+const genBookSchedules = (start, end, gap) => {
+  /* TODO: Get all the busy time duration and neglect those time durations */
   const result = [];
 
   // Parse the start and end times
@@ -115,10 +116,7 @@ const createTimeArray = (start, end, gap) => {
   return result;
 };
 
-// Example usage:
-const timeArray = createTimeArray("12:00", "18:00", 30); // 30 minutes gap
-console.log(timeArray);
-
+/* Booking  */
 const DialogBoxContent = ({ bookingFormik, service, showThankYou = true }) => {
   const { setFieldValue, handleChange, values, errors } = bookingFormik;
   const handleDateChange = (date) => {
@@ -131,7 +129,9 @@ const DialogBoxContent = ({ bookingFormik, service, showThankYou = true }) => {
     };
   };
 
-  let TimeDurations = createTimeArray("12:00", "18:00", service?.duration);
+  /*  */
+
+  let TimeDurations = genBookSchedules("12:00", "18:00", service?.duration);
   return (
     <Box className="bookingDialogCourse">
       <Grid container>
@@ -152,7 +152,7 @@ const DialogBoxContent = ({ bookingFormik, service, showThankYou = true }) => {
             <Box paddingInline={2}>
               <List dense={true} className="info-list">
                 <ListItem>
-                  <ListItemText primaryTypographyProps={{ fontSize: "20px" }} primary={`You are booking ${service.duration} Minutes Session for ${service.name}`} />
+                  <ListItemText primaryTypographyProps={{ fontSize: "20px", lineHeight: "24px" }} primary={`You are booking ${service.duration} Minutes Session for "${service.name}"`} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
@@ -195,10 +195,10 @@ const DialogBoxContent = ({ bookingFormik, service, showThankYou = true }) => {
                         onChange={handleDateChange}
                         sx={{
                           ".MuiPickersToolbar-root": (theme) => ({
-                            color: theme.palette.primary.dark,
+                            color: theme.palette.primary.main,
                             borderRadius: 1.5,
                             borderWidth: 2,
-                            borderColor: theme.palette.primary.dark,
+                            borderColor: theme.palette.primary.main,
                             border: "2px solid",
                             backgroundColor: theme.palette.primary.lightest,
                           }),
@@ -223,14 +223,14 @@ const DialogBoxContent = ({ bookingFormik, service, showThankYou = true }) => {
                 <AccordionDetails>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
-                      <TextField required onChange={handleChange} label="Full Name" name="name" value={values.name} fullWidth />
+                      <TextField required onBlur={handleChange} label="Full Name" name="name" defaultValue={values.name} fullWidth />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField required onChange={handleChange} label="Email Address" name="email" value={values.email} fullWidth />
+                      <TextField required onBlur={handleChange} label="Email Address" name="email" defaultValue={values.email} fullWidth />
                     </Grid>
                     <Grid item xs={12}>
                       <Stack direction={"row"} gap={1.5}>
-                        <Select name="countryCode" value={values.countryCode} onChange={handleChange}>
+                        <Select name="countryCode" defaultValue={values.countryCode} onBlur={handleChange}>
                           {CountryCodeJSON.map((cn) => (
                             <MenuItem key={cn.name} value={cn.code}>
                               {cn.flagIcon}&nbsp;
@@ -238,7 +238,7 @@ const DialogBoxContent = ({ bookingFormik, service, showThankYou = true }) => {
                             </MenuItem>
                           ))}
                         </Select>
-                        <TextField required onChange={handleChange} type="number" label="Contact Number" name="contact" value={values.contact} fullWidth />
+                        <TextField required onBlur={handleChange} type="number" label="Contact Number" name="contact" defaultValue={values.contact} fullWidth />
                       </Stack>
                     </Grid>
                   </Grid>

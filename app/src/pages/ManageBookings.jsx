@@ -18,10 +18,11 @@ export const ManageBookings = () => {
       });
   }, []);
   return (
-    <Container sx={{ paddingY: 2 }}>
+    <Container maxWidth={"xl"} sx={{ paddingY: 2 }}>
       <Stack gap={2}>
-        <Box variant="outlined" bgcolor={"white"} padding={2} borderRadius={1.5}>
-          <Typography variant="h4">Manage Bookings</Typography>
+        <Box>
+          <Typography color={"primary"} variant="h5">Manage Bookings</Typography>
+          <Typography>Here you can manage all your bookings</Typography>
         </Box>
         <Card variant="outlined" sx={{ p: 2 }}>
           <DataTable rows={bookings.data} cols={Cols} />

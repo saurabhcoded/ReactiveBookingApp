@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Card, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Stack, Typography } from "@mui/material";
 import DataTable from "@/components/common/DataTable";
 import { getAllServices } from "@/_services/servicesService";
 
@@ -18,11 +18,21 @@ export const ManageServices = () => {
       });
   }, []);
   return (
-    <Container sx={{ paddingY: 2 }}>
+    <Container maxWidth={"xl"} sx={{ paddingY: 2 }}>
       <Stack gap={2}>
-        <Box variant="outlined" bgcolor={"white"} padding={2} borderRadius={1.5}>
-          <Typography variant="h4">Manage Services</Typography>
-        </Box>
+        <Stack direction={"row"} gap={2} width={"100%"} justifyContent={"space-between"} alignItems={"center"}>
+          <Box>
+            <Typography color={"primary"} variant="h5">
+              Manage Services
+            </Typography>
+            <Typography>Here you can manage all your Services</Typography>
+          </Box>
+          <Stack direction={"row"}>
+            <Button variant="contained" size="small">
+              Add New
+            </Button>
+          </Stack>
+        </Stack>
         <Card variant="outlined" sx={{ p: 2 }}>
           <DataTable rows={services.data} cols={Cols} />
         </Card>

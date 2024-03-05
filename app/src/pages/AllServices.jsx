@@ -25,9 +25,10 @@ export const AllServices = () => {
     <Box className="service">
       <Container>
         <Box>
-          <Typography color={"white"} variant="h4" component="h1" gutterBottom>
+          <Typography variant="h5" component="h1">
             All Services
           </Typography>
+          <Typography gutterBottom>List of available active services by bookhappy</Typography>
           <Grid container spacing={3} className="grid-wrapper">
             {services.loading
               ? [1, 2, 3].map((skeleton) => {

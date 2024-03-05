@@ -2,8 +2,8 @@ import {common} from '@mui/material/colors';
 import {alpha} from '@mui/material/styles';
 import colorsObj, {error, indigo, info, neutral, success, warning} from './colors';
 
-export function createPalette(primaryTheme = 'indigo') {
-  let defaultTheme = Object.keys(colorsObj).includes(primaryTheme) ? primaryTheme : 'indigo';
+export function createPalette(primaryTheme = 'info') {
+  let defaultTheme = Object.keys(colorsObj).includes(primaryTheme) ? primaryTheme : 'info';
   return {
     action: {
       active: neutral[500],

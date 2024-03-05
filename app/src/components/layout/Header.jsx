@@ -8,11 +8,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { KeyboardArrowDown } from "@mui/icons-material";
 
 let SelectWidth = "0px";
-const SIDE_NAV_WIDTH = 280;
-const SIDE_NAV_MINI_WIDTH = 80;
-const TOP_NAV_HEIGHT = 64;
 
-export const Header = () => {
+export const Header = ({ layoutContants = { TOP_NAV_HEIGHT: 80 } }) => {
+  const { SIDE_NAV_WIDTH, SIDE_NAV_MINI_WIDTH, TOP_NAV_HEIGHT } = layoutContants;
   const [openMenuID, setOpenMenuID] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
@@ -71,7 +69,7 @@ export const Header = () => {
               </IconButton>
             )}
             <NavLink to={"/"}>
-              <img src="/logo.svg" alt="reactive" height={30} />
+              <img src="/logo.png" alt="reactive" height={40} />
             </NavLink>
           </Stack>
           <Stack alignItems="center" direction="row" spacing={2}>

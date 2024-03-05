@@ -1,4 +1,5 @@
-import { Box, Card, CardContent, Grid, LinearProgress, Rating, Stack, Typography, linearProgressClasses, styled } from "@mui/material";
+import { Edit } from "@mui/icons-material";
+import { Box, Button, Card, CardContent, Grid, LinearProgress, Rating, Stack, Typography, linearProgressClasses, styled } from "@mui/material";
 import React from "react";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -15,25 +16,31 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 export const ServiceReviews = () => {
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography variant="h5" component="h5" gutterBottom>
-          Reviews
-        </Typography>
-        <Box className="review-box">
-          <Stack direction={"row"} gap={2}>
-            <ReviewScoreBox />
-            <Box sx={{ width: "100%" }}>
-              <Stack gap={2} className="rating">
-                <ReviewLineComponent title="Features" rating={4.6} ratingCount={40} />
-                <ReviewLineComponent title="Value for Money" rating={4.2} ratingCount={40} />
-                <ReviewLineComponent title="Ease of Use" rating={2.7} ratingCount={40} />
-                <ReviewLineComponent title="Customer Support" rating={4.9} ratingCount={40} />
-              </Stack>
-            </Box>
-          </Stack>
+    <Card variant="outlined" sx={{ padding: 2 }}>
+      <Stack direction={"row"} justifyContent={"space-between"} alignItems={"flex-start"}>
+        <Box>
+          <Typography color={"primary"} variant="h5" component="h5">
+            Reviews
+          </Typography>
+          <Typography gutterBottom>Wanted to write your review about this service</Typography>
         </Box>
-      </CardContent>
+        <Button variant="contained" size="small" startIcon={<Edit />}>
+          Write
+        </Button>
+      </Stack>
+      <Box className="review-box" marginTop={2}>
+        <Stack direction={"row"} gap={2}>
+          <ReviewScoreBox />
+          <Box sx={{ width: "100%" }}>
+            <Stack gap={2} className="rating">
+              <ReviewLineComponent title="Features" rating={4.6} ratingCount={40} />
+              <ReviewLineComponent title="Value for Money" rating={4.2} ratingCount={40} />
+              <ReviewLineComponent title="Ease of Use" rating={2.7} ratingCount={40} />
+              <ReviewLineComponent title="Customer Support" rating={4.9} ratingCount={40} />
+            </Stack>
+          </Box>
+        </Stack>
+      </Box>
     </Card>
   );
 };
@@ -71,7 +78,7 @@ const ReviewLineComponent = ({ title, ratingCount, rating }) => {
           {rating}
         </Typography>
       </Stack>
-      <BorderLinearProgress color="warning" variant="determinate" value={rating * 20} />
+      <BorderLinearProgress variant="determinate" value={rating * 20} />
     </Box>
   );
 };
