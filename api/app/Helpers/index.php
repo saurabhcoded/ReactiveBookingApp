@@ -10,7 +10,8 @@ if (!function_exists('executeCurl')) {
      * @param mixed $data
      * @return \Illuminate\Http\JsonResponse
      */
-    function executeCurl($url, $data, $headers, $method = 'POST', $stringify = true) {
+    function executeCurl($url, $data, $headers, $method = 'POST', $stringify = true)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -48,7 +49,8 @@ if (!function_exists('apiResponse')) {
      * @param $message string, $status string, $statusCode integer, $data object
      * @return response()->json([$message, $status, $data], $statusCode)
      */
-    function apiResponse($message, $status, $statusCode, $data = null) {
+    function apiResponse($message, $status, $statusCode, $data = null)
+    {
         $responseArray = [
             'message' => $message,
             'status' => $status,
@@ -56,6 +58,6 @@ if (!function_exists('apiResponse')) {
         if ($data) {
             $responseArray['data'] = $data;
         }
-        return  response()->json($responseArray, $statusCode);
+        return  response()->json($responseArray, $statusCode)->header('Content-Security-Policy', "img-src 'self'");
     }
 }

@@ -46,6 +46,7 @@ import {
   
     return (
       <form id="payment-form" onSubmit={handleSubmit}>
+        <h4>Payment Form</h4>
         <LinkAuthenticationElement id="link-authentication-element"
           // Access the email value like so:
           // onChange={(event) => {

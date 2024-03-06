@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GmeetController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ZoomController;
@@ -63,6 +64,11 @@ Route::group(['prefix' => 'booking'], function () {
     Route::post('/create', [BookingController::class, 'createBooking']);
     Route::get('/all', [BookingController::class, 'getAllBookings']);
     Route::get('/mybooking/{bookEmail}', [BookingController::class, 'getPersonalBookings']);
+});
+
+/* Payment Routes */
+Route::group(['prefix' => 'payment'], function () {
+    Route::get('/stripe/checkout', [PaymentController::class, 'checkout'])->name("stripe.checkout");
 });
 
 Route::any('{any}', function () {

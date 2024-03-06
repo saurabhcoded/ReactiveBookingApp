@@ -9,6 +9,8 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { useFormik } from "formik";
 import moment from "moment";
 import { ThankYouCard } from "./ThankYouCard";
+import { getStripeCheckoutUrl } from "@/_services/paymentService";
+import { useNavigate } from "react-router-dom";
 
 const Accordion = styled((props) => <MuiAccordion disableGutters elevation={0} square {...props} />)(({ theme }) => ({
   border: "none",
@@ -44,6 +46,7 @@ export const BookingDialog = ({ open = false, setOpen, service }) => {
   const [pageStatus, setPageStatus] = React.useState("booking");
   const isThankYou = pageStatus === "thankyou";
   const isBooking = pageStatus === "booking";
+  const navigate = useNavigate();
   const bookingFormik = useFormik({
     initialValues: {
       bookDate: moment().format("YYYY-MM-DD"),
@@ -54,22 +57,26 @@ export const BookingDialog = ({ open = false, setOpen, service }) => {
       contact: "",
       countryCode: "+91",
     },
-    onSubmit: (values, helpers) => {
+    onSubmit: async (values, helpers) => {
       console.log("Booking Confirmed", values);
       helpers.setSubmitting(true);
-      createNewBooking(values)
-        .then((response) => {
-          helpers.setSubmitting(false);
-          console.log("response", response);
-          if (response.data.status === "success") {
-            alert(response.data.message);
-            setPageStatus("thankyou");
-          }
-        })
-        .catch((error) => {
-          console.log("Error", error);
-          helpers.setSubmitting(false);
-        });
+      const payLink = await getStripeCheckoutUrl(values);
+      console.log("payLink", payLink);
+      const PayWindow = window.open(payLink, "", "width=600,height=600,left=400,top=100");
+      // navigate(payLink);
+      // createNewBooking(values)
+      //   .then((response) => {
+      //     helpers.setSubmitting(false);
+      //     console.log("response", response);
+      //     if (response.data.status === "success") {
+      //       alert(response.data.message);
+      //       setPageStatus("thankyou");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("Error", error);
+      //     helpers.setSubmitting(false);
+      //   });
     },
   });
   const { handleSubmit, isSubmitting } = bookingFormik;
